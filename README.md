@@ -21,6 +21,8 @@ Write an API microservice using Spring Boot to simulate user registration. Write
 
 **********************
 **************************************** Play with these steps ********************************************************************
+
+
 Clone the project, start the application **ThymeleafdemoApplication.java**, go to the link, and follow the instruction.
 http://localhost:8080/showForm
 
