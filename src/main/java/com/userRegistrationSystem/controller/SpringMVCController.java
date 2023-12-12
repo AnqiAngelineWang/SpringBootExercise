@@ -1,14 +1,32 @@
 package com.userRegistrationSystem.controller;
 
+import io.ipgeolocation.api.Geolocation;
+import io.ipgeolocation.api.GeolocationParams;
+import io.ipgeolocation.api.IPGeolocationAPI;
+import io.ipgeolocation.api.exceptions.IPGeolocationError;
 import jakarta.servlet.http.HttpServletRequest;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.http.HttpResponse;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Controller
 public class SpringMVCController {
@@ -43,17 +61,25 @@ public class SpringMVCController {
             model.addAttribute("messagePassword", "Password is invalid");
             flag = false;
         }
-
-//        model.addAttribute("password",thePassword );
         model.addAttribute("message", checkPassword(thePassword));
-
         if (!checkPassword(thePassword)) {
             flag = false;
         }
 
+        String ipAddress = request.getParameter("ip");
+        String city = checkLocation(ipAddress);
+        if (city.equals("NO")) {
+            model.addAttribute("messageCity", "You are not in Canada and can't register.");
+            model.addAttribute("city", "unknown");
+            flag = false;
+        } else {
+            model.addAttribute("city", city);
+        }
+
         if (flag) {
+            //TODO: re-direct to a new Welcome Page
             model.addAttribute("welcome", "Welcome to the world. Your UUID is: ");
-            model.addAttribute("uuid",generateUUID() );
+            model.addAttribute("uuid", generateUUID());
         }
         return "helloworld-showform";
     }
@@ -71,17 +97,51 @@ public class SpringMVCController {
         return matcher.matches();
     }
 
-    private  String generateUUID(){
+    private String generateUUID() {
         UUID uuid = UUID.randomUUID();
         System.out.println("UUID generated - " + uuid);
         System.out.println("UUID Version - " + uuid.version());
         return uuid.toString();
     }
 
-//    public static void main(String[] args) {
+
+    private String checkLocation(String url) {
+        JSONObject jsonObject = null;
+
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://ip-api.com/json/" + url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+            System.out.println(response.statusCode());
+            jsonObject = new JSONObject(response.body());
+            if (jsonObject.get("status").equals("success")) {
+                System.out.println(jsonObject.get("query"));
+                System.out.println(jsonObject.get("country"));
+                return jsonObject.get("country").toString().equals("Canada") ? jsonObject.get("city").toString() : "NO";
+
+            }
+        } catch (Exception e) {
+            System.out.println("Can not find location.");
+        }
+        return "NO";
+
+    }
+
+
+    public static void main(String[] args) {
 //        System.out.println(checkPassword("12asdfg6W$"));
 //        System.out.println(generateUUID());
+//       checkLocation("");
+
+
     }
+}
 
 
 
