@@ -67,18 +67,22 @@ public class SpringMVCController {
         }
 
         String ipAddress = request.getParameter("ip");
+        if (ipAddress == null || ipAddress.isEmpty()) {
+            model.addAttribute("messageIP", "IP address is empty.");
+            flag = false;
+        }
         String city = checkLocation(ipAddress);
         if (city.equals("NO")) {
             model.addAttribute("messageCity", "You are not in Canada and can't register.");
             model.addAttribute("city", "unknown");
             flag = false;
-        } else {
+        } else if (flag){
             model.addAttribute("city", city);
         }
 
         if (flag) {
             //TODO: re-direct to a new Welcome Page
-            model.addAttribute("welcome", "Welcome to the world. Your UUID is: ");
+            model.addAttribute("welcome", "Welcome Message: Welcome to the world. Your UUID is: ");
             model.addAttribute("uuid", generateUUID());
         }
         return "helloworld-showform";
@@ -129,6 +133,7 @@ public class SpringMVCController {
         } catch (Exception e) {
             System.out.println("Can not find location.");
         }
+        //invalid IP address
         return "NO";
 
     }
