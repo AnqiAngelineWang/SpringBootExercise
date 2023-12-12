@@ -1,4 +1,4 @@
-package com.userRegistrationSystem;
+package com.userregistrationsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
