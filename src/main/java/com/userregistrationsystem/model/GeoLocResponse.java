@@ -2,8 +2,8 @@ package com.userregistrationsystem.model;
 
 public class GeoLocResponse {     // API server response POSTMAN to me
     String city;
-    String uuid;
-    String message;
+  //  String uuid;
+  //  String message;
     String country;
 
     String query;
@@ -32,21 +32,21 @@ public class GeoLocResponse {     // API server response POSTMAN to me
         this.city = city;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
+    // public String getUuid() {
+    //     return uuid;
+    // }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+    // public void setUuid(String uuid) {
+    //     this.uuid = uuid;
+    // }
 
-    public String getMessage() {
-        return message;
-    }
+    // public String getMessage() {
+    //     return message;
+    // }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    // public void setMessage(String message) {
+    //     this.message = message;
+    // }
 }
 
 
