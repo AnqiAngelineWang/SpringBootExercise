@@ -19,24 +19,19 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    //localhost:8080/login
-//    @POSTMapping(value = "/login", method = RequestMethod.POST)
-//    @PostMapping("/login")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public OutputModel controllerLogIn( @RequestBody RequestModel model) {
-//    public OutputModel controllerLogIn(@RequestBody @RequestParam(name = "LoginRequest", required = true) RequestModel model) {
-        // @Validated
 
         boolean nameNotEmpty = loginService.checkName(model.getUsername());
         boolean passwordValid = loginService.checkPassword(model.getPassword());
-//        GeoLocResponse ipInfo = loginService.checkIPLocation(model.getIpAddress());
+
         System.out.println("hello");
         GeoLocResponse ipInfo = loginService.checkIPLocation1(model.getIpAddress());
         System.out.println(ipInfo.getCountry());
+
         boolean inCanada = loginService.ipInCanada(ipInfo.getCountry());
         if ((nameNotEmpty) && (passwordValid) && (inCanada)) {
-
 
             OutputModel outputModel = new OutputModel();
             outputModel.setCity(ipInfo.getCity());

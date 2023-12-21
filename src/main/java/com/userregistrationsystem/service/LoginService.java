@@ -8,8 +8,6 @@ public interface LoginService {
 
     boolean checkPassword(String password);
 
-//    GeoLocResponse checkIPLocation(String url);
-
     GeoLocResponse checkIPLocation1(String ipAddress);
 
     String generateUUID();

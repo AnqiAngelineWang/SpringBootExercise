@@ -44,78 +44,36 @@ public class LoginServiceImpl implements LoginService {
 
     }
 
-    //    @Override
-//    public GeoLocResponse checkIPLocation(String ipAddress) {
-//        return new GeoLocResponse();
-//    }
     @Override
     public  GeoLocResponse checkIPLocation1(String ipAddress) {
 
         if (ipAddress == null || ipAddress.isEmpty()) {
             System.out.println("IP address is empty.");
             return new GeoLocResponse();
-//        }
-//        if (!validIP(ipAddress)) {
-//            return new GeoLocResponse();
+        }
+        if (!validIP(ipAddress)) {
+            return new GeoLocResponse();
         } else {
 
-
             try {
+                HttpClient client = HttpClient.newHttpClient();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://ip-api.com/json/" + ipAddress))
+                        .GET()
+                        .build();
 
-//                HttpRequest request = HttpRequest.newBuilder()
-//                        .uri(URI.create("http://ip-api.com/json/" + ipAddress))
+//                HttpRequest request = HttpRequest.newBuilder(new URI("http://ip-api.com/json/"))
+//                        .header("Accept", "application/json")
 //                        .GET()
 //                        .build();
-                HttpClient client = HttpClient.newHttpClient();
-                HttpRequest request = HttpRequest.newBuilder(new URI("http://ip-api.com/json/"))
-                        .header("Accept", "application/json")
-                        .build();
                 System.out.println(request.uri());
                 GeoLocResponse response = client.send(request, new JsonBodyHandler<>(GeoLocResponse.class)).body();
                 System.out.println(response.getCity());
 //                return response.body();
                 System.out.println("a");
-//                ObjectMapper objectMapper = new ObjectMapper();
-//                Gson gson = new GsonBuilder.create();
-
-                GeoLocResponse model = HttpClient.newHttpClient()
-                        .send(request, new JsonBodyHandler<>(GeoLocResponse.class))
-                        .body();
-
-                System.out.println(model.getCity());
+                return response;
 
 
-                // client.send(request,   new JsonBodyHandler<>(GeoLocResponse.class)).body() ;
-                //                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-
-                System.out.println("e");
-//                GeoLocResponse response1 = HttpClient.newHttpClient()
-//                        .send(request, new JsonBodyHandler<>(GeoLocResponse.class)).body();
-//                System.out.println("e2");
-
-                HttpClient client2 = HttpClient.newHttpClient();
-                HttpResponse<String> response3 = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-
-                String json = response3.body();
-                System.out.println(json);
-                System.out.println("e3");
-
-                HttpClient client1 = HttpClient.newHttpClient();
-                HttpRequest request1 = HttpRequest.newBuilder()
-                        .uri(URI.create("http://ip-api.com/json/" + ipAddress))
-                        .build();
-
-                HttpResponse<String> response1 = client1.send(request1, HttpResponse.BodyHandlers.ofString());
-
-                System.out.println(response1.body());
-
-
-                ObjectMapper objectMapper = new ObjectMapper();
-                GeoLocResponse element = objectMapper.readValue(json, GeoLocResponse.class);
-                System.out.println("e4");
-                return element;
             } catch (Exception e) {
                 System.out.println("Can not find location.");
             }
@@ -124,30 +82,6 @@ public class LoginServiceImpl implements LoginService {
         }
         return new GeoLocResponse();
     }
-
-//    public static void main(String[] args) {
-//        LoginServiceImpl loginService = new LoginServiceImpl();
-//        GeoLocResponse geoLocResponse = loginService.checkIPLocation1("45.44.245.7");
-//
-//        System.out.println(geoLocResponse.getCity());
-//    }
-
-//                Model model = HttpClient.newHttpClient()
-//                        .send(request, new JsonBodyHandler<>(Model.class))
-//                        .body();
-
-
-//
-//                HttpRequest request = HttpRequest.newBuilder(new URI("http://ip-api.com/json/" + ipAddress))
-//                        .header("Accept", "application/json")
-//                        .build();
-//
-//                GeoLocResponse response = HttpClient.newHttpClient()
-//                        .send(request, new JsonBodyHandler<>(GeoLocResponse.class))
-//                        .body();
-//
-//                System.out.println(response);
-
 
     @Override
     public String generateUUID() {
