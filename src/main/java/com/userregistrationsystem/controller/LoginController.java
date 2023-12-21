@@ -22,7 +22,7 @@ public class LoginController {
     //localhost:8080/login
 //    @POSTMapping(value = "/login", method = RequestMethod.POST)
 //    @PostMapping("/login")
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public OutputModel controllerLogIn( @RequestBody RequestModel model) {
 //    public OutputModel controllerLogIn(@RequestBody @RequestParam(name = "LoginRequest", required = true) RequestModel model) {
