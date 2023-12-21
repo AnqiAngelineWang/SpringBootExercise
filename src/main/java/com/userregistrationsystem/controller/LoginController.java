@@ -21,23 +21,18 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public OutputModel controllerLogIn( @RequestBody RequestModel model) {
+    public OutputModel controllerLogIn(@RequestBody RequestModel model) {
 
         boolean nameNotEmpty = loginService.checkName(model.getUsername());
         boolean passwordValid = loginService.checkPassword(model.getPassword());
+        boolean ipValid = loginService.checkIP(model.getIpAddress());
+        boolean inCanada = loginService.ipInCanada(model.getIpAddress());
 
-        System.out.println("hello");
-        GeoLocResponse ipInfo = loginService.checkIPLocation1(model.getIpAddress());
-        System.out.println(ipInfo.getCountry());
-
-        boolean inCanada = loginService.ipInCanada(ipInfo.getCountry());
-        if ((nameNotEmpty) && (passwordValid) && (inCanada)) {
-
+        if ((nameNotEmpty) && (passwordValid) && (inCanada) && (ipValid)) {
             OutputModel outputModel = new OutputModel();
-            outputModel.setCity(ipInfo.getCity());
+            outputModel.setCity(loginService.city);
             outputModel.setUuid(loginService.generateUUID());
             outputModel.setMessage("Welcome Page");
-
             return outputModel;
         }
         return new OutputModel();

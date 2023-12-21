@@ -3,16 +3,16 @@ package com.userregistrationsystem.service;
 import com.userregistrationsystem.model.GeoLocResponse;
 
 public interface LoginService {
+    String city = "";
 
     boolean checkName(String theName);
 
     boolean checkPassword(String password);
 
-    GeoLocResponse checkIPLocation1(String ipAddress);
 
     String generateUUID();
 
-    boolean validIP(String ip);
+    boolean ipInCanada(String ipAddress);
 
-    boolean ipInCanada(String countryName);
+    boolean checkIP(String ip);
 }

@@ -2,7 +2,6 @@ package com.userregistrationsystem.model;
 
 public class OutputModel {   // my geo server response to my client
     String city;
-
     String uuid;
     String message;
 
