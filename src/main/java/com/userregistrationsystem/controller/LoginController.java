@@ -30,7 +30,10 @@ public class LoginController {
 
         boolean nameNotEmpty = loginService.checkName(model.getUsername());
         boolean passwordValid = loginService.checkPassword(model.getPassword());
-        GeoLocResponse ipInfo = loginService.checkIPLocation(model.getIpAddress());
+//        GeoLocResponse ipInfo = loginService.checkIPLocation(model.getIpAddress());
+        System.out.println("hello");
+        GeoLocResponse ipInfo = loginService.checkIPLocation1(model.getIpAddress());
+        System.out.println(ipInfo.getCountry());
         boolean inCanada = loginService.ipInCanada(ipInfo.getCountry());
         if ((nameNotEmpty) && (passwordValid) && (inCanada)) {
 
