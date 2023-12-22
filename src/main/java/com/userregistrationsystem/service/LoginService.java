@@ -12,7 +12,7 @@ public interface LoginService {
 
     String generateUUID();
 
-    boolean ipInCanada(String ipAddress);
+    String ipInCanada(String ipAddress);
 
     boolean checkIP(String ip);
 }

@@ -1,8 +1,10 @@
 package com.userregistrationsystem.service;
 
 import com.userregistrationsystem.model.GeoLocResponse;
+import com.userregistrationsystem.model.OutputModel;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,7 +14,6 @@ import java.util.regex.Pattern;
 
 @Service("serviceImpl")
 public class LoginServiceImpl implements LoginService {
-    String city = "";
 
     @Override
     public boolean checkName(String theName) {
@@ -54,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public boolean ipInCanada(String ipAddress) {
+    public String ipInCanada(String ipAddress) {
 
         try {
             HttpClient client = HttpClient.newHttpClient();
@@ -67,14 +68,13 @@ public class LoginServiceImpl implements LoginService {
             GeoLocResponse response = client.send(request, new JsonBodyHandler<>(GeoLocResponse.class)).body();
 
             if (response.getCountry().equals("Canada")) {
-                city = response.getCity();
-                return true;
+              String  city = response.getCity();
+                return city;
             }
         } catch (Exception e) {
-            System.out.println("Can not find location.");
-        }
 
-        return false;
+        }
+        return "false";
     }
 
     @Override
