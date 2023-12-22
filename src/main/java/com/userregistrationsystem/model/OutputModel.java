@@ -1,18 +1,27 @@
 package com.userregistrationsystem.model;
 
-public class OutputModel {   // my geo server response to my client
+public class OutputModel extends ErrorModel {   // my geo server response to my client
     String city;
     String uuid;
-    String message;
-    int statusCode;
+//    String message;
+//    int statusCode;
+    String userName;
 
-    public int getStatusCode() {
-        return statusCode;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
+
+//    public int getStatusCode() {
+//        return statusCode;
+//    }
+//
+//    public void setStatusCode(int statusCode) {
+//        this.statusCode = statusCode;
+//    }
 
     public String getCity() {
         return city;

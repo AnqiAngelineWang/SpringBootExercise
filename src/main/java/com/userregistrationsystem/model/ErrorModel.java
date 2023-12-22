@@ -1,9 +1,9 @@
 package com.userregistrationsystem.model;
 
-public class ErrorModel extends OutputModel{
+public class ErrorModel {
 
     String message;
-    int statusCode;
+//    int statusCode;
 
     public String getMessage() {
         return message;
@@ -13,11 +13,11 @@ public class ErrorModel extends OutputModel{
         this.message = message;
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
+//    public int getStatusCode() {
+//        return statusCode;
+//    }
+//
+//    public void setStatusCode(int statusCode) {
+//        this.statusCode = statusCode;
+//    }
 }

@@ -1,7 +1,11 @@
 package com.userregistrationsystem.controller;
 
 //import com.userregistrationsystem.exception.GeoException;
+
+import com.userregistrationsystem.exception.GeoException;
 import com.userregistrationsystem.exception.GeoHandler;
+import com.userregistrationsystem.model.ErrorModel;
+import com.userregistrationsystem.model.GeoLocResponse;
 import com.userregistrationsystem.model.RequestModel;
 import com.userregistrationsystem.model.OutputModel;
 import com.userregistrationsystem.service.LoginService;
@@ -17,6 +21,8 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+    @Autowired
+    protected GeoHandler geoHandler;
 
     @Autowired
     public LoginController(LoginService loginService) {
@@ -25,44 +31,36 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<OutputModel> controllerLogIn(@RequestBody RequestModel model)  { // throws GeoException  // HttpServletResponse response
-
-        GeoHandler geoHandler = new GeoHandler();
-            boolean nameNotEmpty = loginService.checkName(model.getUsername());
-            if (!nameNotEmpty) {
-                ResponseEntity<OutputModel> errorResponse = geoHandler.handleGeoException(HttpServletResponse.SC_BAD_REQUEST,"Invalid username" );
-                return errorResponse;
-
-            }
-            boolean passwordValid = loginService.checkPassword(model.getPassword());
-            if (!passwordValid) {
-                ResponseEntity<OutputModel> errorResponse = geoHandler.handleGeoException(HttpServletResponse.SC_BAD_REQUEST,"Invalid password" );
-                return errorResponse;
-
-            }
-
-            boolean ipValid = loginService.checkIP(model.getIpAddress());
-            if (!ipValid) {
-                ResponseEntity<OutputModel> errorResponse = geoHandler.handleGeoException(HttpServletResponse.SC_BAD_REQUEST,"invalid IP Address" );
-                return errorResponse;
-//                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//                response.setHeader("message", "invalid IP Address");
-//                throw new GeoException(HttpStatus.BAD_REQUEST,"INVALID");
-            }
-
-            String inCanada = loginService.ipInCanada(model.getIpAddress());
-            if(inCanada.equals("false")) {
-                ResponseEntity<OutputModel> errorResponse = geoHandler.handleGeoException(HttpServletResponse.SC_BAD_REQUEST,"You are not in Canada" );
-                return errorResponse;
-            }
+    public ResponseEntity<ErrorModel> controllerLogIn(@RequestBody RequestModel model) throws GeoException {   // HttpServletResponse response
 
 
+        boolean nameNotEmpty = loginService.checkName(model.getUsername());
+        if (!nameNotEmpty) {
+            return geoHandler.handleGeoException(HttpServletResponse.SC_BAD_REQUEST, "Invalid username");
 
-        //    if ((nameNotEmpty) && (passwordValid) && (inCanada) && (ipValid)) {
+        }
+        boolean passwordValid = loginService.checkPassword(model.getPassword());
+        if (!passwordValid) {
+            return geoHandler.handleGeoException(HttpServletResponse.SC_BAD_REQUEST, "Invalid password");
+
+        }
+
+        boolean ipValid = loginService.checkIP(model.getIpAddress());
+        if (!ipValid) {
+            return geoHandler.handleGeoException(HttpServletResponse.SC_FORBIDDEN, "invalid IP Address");
+        }
+
+        String inCanada = loginService.ipInCanada(model.getIpAddress());
+        if (inCanada.equals("false")) {
+            return geoHandler.handleGeoException(HttpServletResponse.SC_BAD_REQUEST, "You are not in Canada and not eligible to register.");
+        }
+
+
         OutputModel outputModel = new OutputModel();
         outputModel.setCity(inCanada);
         outputModel.setUuid(loginService.generateUUID());
         outputModel.setMessage("Welcome Page");
+        outputModel.setUserName(model.getUsername());
         return ResponseEntity.ok(outputModel);
 
     }
